@@ -54,7 +54,7 @@ const createNewUser = async (req, res) => {
 // @acces Private
 const updateUser = async (req, res) => {
     const {id, username, roles, active, password} = req.body;
-    console.log(id)
+    // console.log(id)
     
     if(!id || !username || !roles.length || !Array.isArray(roles) || typeof active !== "boolean") {
         return res.status(400).json({
@@ -62,7 +62,7 @@ const updateUser = async (req, res) => {
         });
     }
 
-    const  user = await User.findById(id);
+    const user = await User.findById(id);
 
     if (!user) {
         return res.status(400).json({message: "User not found"});
