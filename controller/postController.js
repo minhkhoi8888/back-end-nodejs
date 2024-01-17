@@ -13,9 +13,9 @@ const getAllPosts = async (req, res) => {
         return res.status(400).json({ message: "No posts found" });
     }
 
-    const postsWithUser = await Promise.all(posts.map(async()=>{
-        const user = await User.findById(posts.user).lean().exec();
-        return {... posts, username: user.username}
+    const postsWithUser = await Promise.all(posts.map(async(post)=>{
+        const user = await User.findById(post.user).lean();
+        return {...post, username: user.username}
     }))
 
     res.json(postsWithUser)
@@ -25,24 +25,24 @@ const getAllPosts = async (req, res) => {
 // @route POST /posts
 // @access Private
 const createNewPost = async (req, res) => {
-    const { title, description, type, spelling, image } = req.body;
-
+    const { userId, title, description, type, spelling, image } = req.body;
+console.log(req.body)
     // Confirm data
-    if (!title && !description && !type && !spelling) {
+    if (!title && !description && !type && !spelling && !userId) {
         return res.status(400).json({ message: "Field: title, description, type, spelling are requied" });
     }
 
     // Check duplicate title 
-    const duplicate = await Posts.findOne({ title }).collation({ locate: "en", strength: 2 }).lean();
+    const duplicate = await Posts.findOne({ title }).collation({ locale: "en", strength: 2 }).lean();
 
     if (duplicate) {
         return res.status(409).json({ message: "Duplicate post title" })
     }
 
     // Create and store new post
-    let post = { title, description, type, spelling }
+    let post = { title, description, type, spelling, "user": userId }
     if (image) {
-        post["image"] = image;
+        post = {...post, image};
     }
     
     const isCreate = await Posts.create(post)
@@ -97,6 +97,7 @@ const updatePost = async (req, res) => {
 // @access Private
 const deletePost = async (res, req) => {
     const { id, userId } = req.body;
+    console.log(req.body)
     
     if (!id) {
         return res.status(400).json({ message: "Post ID required" });

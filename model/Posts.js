@@ -24,7 +24,7 @@ const PostsScheme = new mongoose.Schema(
             required: true,
         },
         image: {
-            type: string,
+            type: String,
 
         },
     },
