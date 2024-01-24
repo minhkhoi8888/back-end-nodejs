@@ -1,6 +1,6 @@
 ** Setup:
 1. Create file .env
-2. Require: nodejs >= 18
+2. Require: nodejs >= 18.
 3. Fill content.
    
     PORT=<your_port> -- port run local
@@ -16,4 +16,4 @@
 2. And run:
    $ npm install
    $ npm run dev
-3. Access url: http://localhost:<your_port>/
+3. Access url: http://localhost:<your_port>/api-docs to test API with Swagger UI.
