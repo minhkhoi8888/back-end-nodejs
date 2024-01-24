@@ -95,16 +95,16 @@ const updatePost = async (req, res) => {
 // @desc Delete a post
 // @route DELETE /posts
 // @access Private
-const deletePost = async (res, req) => {
+const deletePost = async (req, res) => {
     const { id, userId } = req.body;
-    console.log(req.body)
+    console.log(req);
     
     if (!id) {
         return res.status(400).json({ message: "Post ID required" });
     }
 
     if (userId) {
-        const user = User.findById(userId)
+        const user = User.findById(userId);
 
         if(!user || !user.role?.includes("admin")) {
             return res.status(400).json({ message: "Can not delete" });
